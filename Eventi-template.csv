@@ -1,0 +1,4 @@
+ID,Pubblicato,Data,Data_fine,Ora_inizio,Ora_fine,Titolo,Categoria,Descrizione,Luogo,Immagine,Link_info,Docente_artista
+EVT001,SI,2026-11-24,,15:00,17:00,Masterclass di pianoforte,Masterclass,Incontro e approfondimento del repertorio pianistico.,Auditorium Roffredo Caetani,,,Nome Cognome
+EVT002,SI,2026-11-26,,18:00,19:30,Concerto di musica elettronica,Concerti,Appuntamento dedicato alle produzioni degli studenti.,Auditorium Roffredo Caetani,,,Dipartimento di Musica Applicata
+EVT003,NO,2026-11-30,,11:00,13:00,Seminario di composizione,Seminari,Esempio non pubblicato: cambia NO in SI per mostrarlo.,Aula da definire,,,Nome Cognome

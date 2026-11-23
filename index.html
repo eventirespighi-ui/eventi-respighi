@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <meta name="description" content="Concerti, masterclass, seminari e appuntamenti del Conservatorio Ottorino Respighi di Latina.">
+  <title>Eventi — Conservatorio Ottorino Respighi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="wordmark" href="./" aria-label="Eventi Conservatorio Respighi">
+        <span>CONSERVATORIO DI MUSICA</span>
+        <strong>OTTORINO RESPIGHI</strong>
+        <span>LATINA · ITALIA</span>
+      </a>
+      <a class="institution-link" href="https://www.conslatina.it/" target="_blank" rel="noopener">SITO ISTITUZIONALE ↗</a>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="eyebrow">STAGIONE 2026 / 2027</p>
+        <div class="intro-line">
+          <h1>Eventi<span>.</span></h1>
+          <p class="intro-note">Concerti, masterclass,<br>incontri e attività aperte al pubblico.</p>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="Navigazione eventi">
+        <div class="view-switch" role="group" aria-label="Tipo di visualizzazione">
+          <button class="view-button active" id="feed-view-button" type="button">FEED</button>
+          <button class="view-button" id="month-view-button" type="button">CALENDARIO</button>
+        </div>
+        <div class="filters" id="filters" aria-label="Filtra per categoria">
+          <button class="filter-button active" data-category="Tutti" type="button">TUTTI</button>
+          <button class="filter-button" data-category="Concerti" type="button">CONCERTI</button>
+          <button class="filter-button" data-category="Masterclass" type="button">MASTERCLASS</button>
+          <button class="filter-button" data-category="Seminari" type="button">SEMINARI</button>
+          <button class="filter-button" data-category="Altri eventi" type="button">ALTRI</button>
+        </div>
+      </section>
+
+      <div class="status-line" id="status" role="status">Caricamento degli eventi…</div>
+
+      <section id="feed-view" class="feed-view" aria-live="polite">
+        <div id="events-list"></div>
+        <div class="empty-state hidden" id="empty-state">
+          <span class="empty-mark">—</span>
+          <p>Non ci sono eventi da mostrare in questa selezione.</p>
+        </div>
+      </section>
+
+      <section id="month-view" class="month-view hidden" aria-label="Calendario mensile">
+        <div class="month-heading">
+          <button class="month-arrow" id="prev-month" type="button" aria-label="Mese precedente">←</button>
+          <h2 id="month-title"></h2>
+          <button class="month-arrow" id="next-month" type="button" aria-label="Mese successivo">→</button>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="calendar-events" id="calendar-events"></div>
+      </section>
+
+      <section class="archive-section">
+        <button class="archive-toggle" id="archive-toggle" type="button" aria-expanded="false">
+          <span>ARCHIVIO EVENTI PASSATI</span><span id="archive-symbol">＋</span>
+        </button>
+        <div class="archive-content hidden" id="archive-content">
+          <div id="archive-list"></div>
+          <p class="archive-note">Gli eventi passati restano consultabili nell'archivio.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>CONSERVATORIO OTTORINO RESPIGHI</strong>
+        <span>LATINA</span>
+      </div>
+      <a href="https://www.conslatina.it/" target="_blank" rel="noopener">TORNA AL SITO ISTITUZIONALE ↗</a>
+    </footer>
+  </div>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

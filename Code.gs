@@ -50,7 +50,8 @@ function getEvents_() {
         location: obj.luogo,
         imageUrl: obj.immagine,
         infoUrl: obj.link_info,
-        artist: obj.docente_artista
+        subtitle: obj.sottotitolo,
+        artist: obj.sottotitolo // compatibilità con la versione del sito già pubblicata
       };
     }).filter(ev => String(ev.published).trim().toUpperCase() === "SI" && ev.title && ev.date);
     events.sort((a,b) => (a.date + a.startTime).localeCompare(b.date + b.startTime));

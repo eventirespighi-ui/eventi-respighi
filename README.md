@@ -5,7 +5,7 @@ Sito statico per pubblicare un feed eventi da Google Sheets.
 ## Contenuto
 - `index.html`: struttura della pagina
 - `style.css`: stile editoriale responsive
-- `script.js`: feed, filtri, descrizioni espandibili, archivio, Google Calendar e file ICS
+- `script.js`: feed, filtri, descrizioni espandibili, archivio, Google Calendar, file ICS e grafiche condivisibili in formato Storia/Post
 - `config.js`: URL della Web App Apps Script
 - `Code.gs`: API di sola lettura da installare in Apps Script
 - `Eventi-template.csv`: intestazioni e righe di esempio per Google Sheets
@@ -15,7 +15,7 @@ Sito statico per pubblicare un feed eventi da Google Sheets.
 2. Rinomina la prima scheda `Eventi`.
 3. Importa `Eventi-template.csv` oppure copia le intestazioni della prima riga.
 4. Mantieni esattamente queste intestazioni:
-   `ID | Pubblicato | Data | Data_fine | Ora_inizio | Ora_fine | Titolo | Categoria | Descrizione | Luogo | Immagine | Link_info | Docente_artista`
+   `ID | Pubblicato | Data | Data_fine | Ora_inizio | Ora_fine | Titolo | Categoria | Descrizione | Luogo | Immagine | Link_info | Sottotitolo`
 5. Per le date usa `yyyy-MM-dd` (es. `2026-11-24`); per gli orari `HH:mm` (es. `15:00`).
 6. In `Pubblicato` usa `SI` per rendere visibile l'evento e `NO` per tenerlo nascosto.
 7. Condividi il foglio con le persone che devono inserire gli eventi. Per sicurezza, limita i permessi di modifica alle persone incaricate.

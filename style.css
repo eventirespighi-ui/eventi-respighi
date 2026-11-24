@@ -61,6 +61,11 @@ h1 span { color: var(--red); }
 .event-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; margin-top: 9px; }
 .event-action { color: var(--white-soft); text-decoration: none; border-bottom: 1px solid rgba(255,254,250,.55); padding: 0 0 3px; font: 700 9px var(--sans); letter-spacing: .045em; width: fit-content; background: none; border-top: 0; border-left: 0; border-right: 0; cursor: pointer; }
 .event-action:hover { color: var(--red); border-color: var(--red); }
+.share-options { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; }
+.share-format { border: 1px solid var(--line); background: transparent; color: var(--white-soft); padding: 5px 8px; cursor: pointer; font: 700 9px var(--sans); letter-spacing: .045em; }
+.share-format:hover { border-color: var(--white); color: var(--white); }
+.share-format:disabled { opacity: .55; cursor: wait; }
+.share-status { flex-basis: 100%; color: var(--white-soft); font: 500 9px/1.45 var(--sans); }
 .description-toggle { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 5px; font-size: 10px; }
 .description-panel { max-width: 660px; padding: 10px 0 2px; }
 .description-panel .event-description { margin: 0; }

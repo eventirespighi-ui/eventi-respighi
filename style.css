@@ -49,14 +49,14 @@ h1 span { color: var(--red); }
 .event-date .weekday { display: block; color: var(--ink-on-accent); font-size: 15px; line-height: 1.4; letter-spacing: .02em; font-weight: 600; text-transform: lowercase; font-variant-caps: normal; margin-top: 7px; }
 .event-date .weekday { font-family: var(--extended); }
 .event-main { min-width: 0; }
-.event-category { color: var(--ink-on-accent); font-size: 18px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin: 0 0 8px; }
+.event-category { color: var(--ink-on-accent); font-size: 19px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin: 0 0 8px; }
 .event-category.extended-category { font-family: var(--extended); text-transform: lowercase; }
-.event-title { margin: 0 0 10px; color: var(--white); font-size: clamp(28px, 3.3vw, 40px); line-height: 1.08; letter-spacing: -.065em; font-weight: 800; }
-.event-subtitle { margin: -2px 0 12px; color: var(--white-soft); font-size: 15px; line-height: 1.45; font-weight: 500; }
+.event-title { margin: 0 0 10px; color: var(--white); font-size: clamp(30px, 3.3vw, 42px); line-height: 1.08; letter-spacing: -.065em; font-weight: 800; }
+.event-subtitle { margin: -2px 0 12px; color: var(--white-soft); font-size: 17px; line-height: 1.45; font-weight: 500; }
 .event-description { max-width: 660px; color: var(--white-soft); font-size: 15px; line-height: 1.65; white-space: pre-line; }
 .event-image { display: block; grid-column: 1 / -1; width: 100%; height: auto; object-fit: contain; object-position: left top; }
 .event-side { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; padding-top: 1px; }
-.event-meta { color: var(--white); font-family: var(--sans); font-size: 14px; line-height: 1.5; font-weight: 600; }
+.event-meta { color: var(--white); font-family: var(--sans); font-size: 17px; line-height: 1.5; font-weight: 600; }
 .event-meta:first-child { font-weight: 800; }
 .event-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; margin-top: 9px; }
 .event-action { color: var(--white-soft); text-decoration: none; border-bottom: 1px solid rgba(255,254,250,.55); padding: 0 0 3px; font: 700 11px var(--sans); letter-spacing: .045em; width: fit-content; background: none; border-top: 0; border-left: 0; border-right: 0; cursor: pointer; }

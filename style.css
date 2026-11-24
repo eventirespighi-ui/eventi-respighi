@@ -54,7 +54,7 @@ h1 span { color: var(--red); }
 .event-title { margin: 0 0 10px; color: var(--white); font-size: clamp(28px, 3.3vw, 40px); line-height: 1.08; letter-spacing: -.065em; font-weight: 800; }
 .event-subtitle { margin: -2px 0 12px; color: var(--white-soft); font-size: 15px; line-height: 1.45; font-weight: 500; }
 .event-description { max-width: 660px; color: var(--white-soft); font-size: 13px; line-height: 1.65; white-space: pre-line; }
-.event-image { display: block; width: 100%; height: auto; object-fit: contain; object-position: left top; margin-top: 17px; }
+.event-image { display: block; grid-column: 1 / -1; width: 100%; height: auto; object-fit: contain; object-position: left top; }
 .event-side { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; padding-top: 1px; }
 .event-meta { color: var(--white); font-family: var(--sans); font-size: 14px; line-height: 1.5; font-weight: 600; }
 .event-meta:first-child { font-weight: 800; }

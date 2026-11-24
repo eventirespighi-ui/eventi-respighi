@@ -74,7 +74,7 @@ h1 span { color: var(--red); }
 .archive-content .event-title { font-size: clamp(25px, 2.8vw, 34px); }
 .archive-note { color: var(--white-soft); font-size: 10px; padding: 12px 0 25px; }
 .site-footer { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-top: 70px; padding: 20px 0 27px; border-top: 1px solid var(--line); }
-.site-footer div { display: flex; flex-direction: column; gap: 4px; font: 700 10px var(--sans); letter-spacing: .04em; }
+.site-footer div { display: flex; flex-direction: column; gap: 4px; text-align: right; font: 700 10px var(--sans); letter-spacing: .04em; }
 .site-footer div span { color: var(--white-soft); font-weight: 500; }
 @media (max-width: 760px) {
   .page-shell { width: calc(100% - 36px); }

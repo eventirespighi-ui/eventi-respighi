@@ -5,7 +5,7 @@ Sito statico per pubblicare un feed eventi da Google Sheets.
 ## Contenuto
 - `index.html`: struttura della pagina
 - `style.css`: stile editoriale responsive
-- `script.js`: feed, filtri, calendario mensile, archivio, Google Calendar e file ICS
+- `script.js`: feed, filtri, descrizioni espandibili, archivio, Google Calendar e file ICS
 - `config.js`: URL della Web App Apps Script
 - `Code.gs`: API di sola lettura da installare in Apps Script
 - `Eventi-template.csv`: intestazioni e righe di esempio per Google Sheets
@@ -52,14 +52,14 @@ Nota privacy: l'endpoint rende pubblici i campi degli eventi con `Pubblicato = S
 ## E. Verifica
 - Pubblica una riga di test con `SI`.
 - Verifica che appaia nel feed.
-- Prova il filtro categoria e la vista calendario.
+- Prova i filtri per categoria e apri una descrizione evento.
 - Apri il link Google Calendar.
 - Scarica e apri il file `.ics`.
 - Cambia `SI` in `NO` e verifica che l'evento sparisca.
 
 ## Note
 - La pagina mostra automaticamente gli eventi futuri nel feed e quelli passati nell'archivio.
-- La vista calendario mensile mostra gli eventi del mese selezionato.
-- Il filtro selezionato si applica sia al feed sia al calendario e all'archivio.
+- Le descrizioni degli eventi si aprono dal relativo pulsante nel feed e nell'archivio.
+- Il filtro selezionato si applica al feed e all'archivio.
 - Per aggiornare il sito dopo una modifica grafica/codice, carica i file modificati su GitHub. Le modifiche agli eventi si fanno invece solo su Google Sheets.
 - Per un progetto istituzionale, usare un account Google e GitHub controllato dal Conservatorio e almeno due amministratori.

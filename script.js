@@ -2,21 +2,17 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
   const state = {
-    events: [], category: "Tutti", view: "feed",
-    month: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    events: [], category: "Tutti",
     archiveOpen: false
   };
   const monthNames = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
   const dayNames = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
-  const shortDays = ["LUN","MAR","MER","GIO","VEN","SAB","DOM"];
   const esc = (v) => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const parseDate = (s) => {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || "").trim());
     return m ? new Date(Number(m[1]), Number(m[2])-1, Number(m[3]), 12) : null;
   };
-  const dateKey = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
   const fmtDate = (d) => `${String(d.getDate()).padStart(2,"0")} ${monthNames[d.getMonth()].toUpperCase()} ${d.getFullYear()}`;
-  const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
   const isPast = (e) => {
     const d = parseDate(e.date); if (!d) return false;
     const [h,m] = (e.endTime || e.startTime || "23:59").split(":").map(Number);
@@ -67,19 +63,20 @@
   function eventMarkup(e, compact=false) {
     const d = parseDate(e.date);
     const dateText = d ? fmtDate(d) : e.date;
+    const category = categoryOf(e.category);
     const desc = e.description ? `<div class="event-description">${esc(e.description)}</div>` : "";
     const image = e.imageUrl && /^https?:\/\//i.test(e.imageUrl) ? `<img class="event-image" src="${esc(e.imageUrl)}" alt="Locandina: ${esc(e.title)}" loading="lazy">` : "";
     const info = e.infoUrl && /^https?:\/\//i.test(e.infoUrl) ? `<a class="event-action" href="${esc(e.infoUrl)}" target="_blank" rel="noopener">DETTAGLI ↗</a>` : "";
     return `<article class="event-item">
-      <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()].toUpperCase() : ""}</span></div>
+      <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()] : ""}</span></div>
       <div class="event-main">
-        <div class="event-category">${esc(categoryOf(e.category))}</div>
-        <h2 class="event-title">${esc(e.title)}</h2>${desc}${image}
+        <div class="event-category${category === "Concerti" || category === "Masterclass" ? " extended-category" : ""}">${esc(category)}</div>
+        <h2 class="event-title">${esc(e.title)}</h2>
+        ${e.description ? `<button class="event-action description-toggle" type="button" aria-expanded="false">DESCRIZIONE <span aria-hidden="true">＋</span></button><div class="description-panel hidden">${desc}</div>` : ""}${image}
       </div>
       <div class="event-side">
         ${e.startTime ? `<div class="event-meta">ORE ${esc(e.startTime)}${e.endTime ? " — " + esc(e.endTime) : ""}</div>` : ""}
         ${e.location ? `<div class="event-meta">${esc(e.location)}</div>` : ""}
-        ${e.artist ? `<div class="event-meta">${esc(e.artist)}</div>` : ""}
         <div class="event-actions">
           <a class="event-action" href="${esc(calendarUrl(e))}" target="_blank" rel="noopener">+ GOOGLE CALENDAR</a>
           <button class="event-action ics-button" type="button" data-event-id="${esc(e.id)}">+ APPLE / .ICS</button>
@@ -99,6 +96,16 @@
     const past = visibleEvents().filter(isPast).sort((a,b) => b.date.localeCompare(a.date));
     $("archive-list").innerHTML = past.length ? past.map(e => eventMarkup(e,true)).join("") : `<p class="empty-state">Nessun evento archiviato in questa selezione.</p>`;
     bindICS();
+    bindDescriptions();
+  }
+  function bindDescriptions() {
+    document.querySelectorAll(".description-toggle").forEach(btn => btn.addEventListener("click", () => {
+      const panel = btn.nextElementSibling;
+      const open = btn.getAttribute("aria-expanded") !== "true";
+      btn.setAttribute("aria-expanded", String(open));
+      panel.classList.toggle("hidden", !open);
+      btn.querySelector("span").textContent = open ? "−" : "＋";
+    }));
   }
   function bindICS() {
     document.querySelectorAll(".ics-button").forEach(btn => btn.addEventListener("click", () => {
@@ -106,34 +113,10 @@
       if (e) downloadICS(e);
     }));
   }
-  function renderMonth() {
-    const year = state.month.getFullYear(), month = state.month.getMonth();
-    $("month-title").textContent = `${monthNames[month]} ${year}`;
-    const first = new Date(year,month,1), offset = (first.getDay()+6)%7;
-    const start = new Date(year,month,1-offset);
-    let html = shortDays.map(d => `<div class="calendar-cell heading">${d}</div>`).join("");
-    for (let i=0;i<42;i++) {
-      const d = new Date(start); d.setDate(start.getDate()+i);
-      const key = dateKey(d), dayEvents = visibleEvents().filter(e=>e.date===key);
-      const cls = ["calendar-cell", d.getMonth()!==month?"other-month":"", dateKey(today())===key?"today":""].join(" ");
-      html += `<div class="${cls}"><span class="calendar-day">${d.getDate()}</span>${dayEvents.slice(0,2).map(e=>`<span class="calendar-dot">${esc(e.title)}</span>`).join("")}${dayEvents.length>2?`<span class="calendar-dot">+${dayEvents.length-2}</span>`:""}</div>`;
-    }
-    $("calendar-grid").innerHTML = html;
-    const monthEvents = visibleEvents().filter(e=>{const d=parseDate(e.date); return d && d.getFullYear()===year && d.getMonth()===month;}).sort((a,b)=>a.date.localeCompare(b.date)||(a.startTime||"").localeCompare(b.startTime||""));
-    $("calendar-events").innerHTML = monthEvents.length ? `<h3>APPUNTAMENTI DEL MESE</h3>${monthEvents.map(e=>`<a class="calendar-event-link" href="${esc(e.infoUrl || "#")}" ${e.infoUrl?'target="_blank" rel="noopener"':""}>${esc(fmtDate(parseDate(e.date)))} · ${esc(e.startTime || "")} — ${esc(e.title)}</a>`).join("")}` : `<p class="event-meta">Nessun appuntamento in questo mese.</p>`;
-  }
-  function setView(view) {
-    state.view = view;
-    $("feed-view").classList.toggle("hidden",view!=="feed");
-    $("month-view").classList.toggle("hidden",view!=="month");
-    $("feed-view-button").classList.toggle("active",view==="feed");
-    $("month-view-button").classList.toggle("active",view==="month");
-    if (view==="month") renderMonth();
-  }
   function setCategory(category) {
     state.category = category;
     document.querySelectorAll(".filter-button").forEach(b=>b.classList.toggle("active",b.dataset.category===category));
-    renderFeed(); if(state.view==="month") renderMonth();
+    renderFeed();
   }
   function normalize(row) {
     return {
@@ -158,18 +141,14 @@
         return;
       }
       state.events = payload.events.map(normalize).filter(e=>e.title && parseDate(e.date));
-      renderFeed(); renderMonth();
+      renderFeed();
     };
     const script = document.createElement("script");
     script.src = `${url}${url.includes("?")?"&":"?"}callback=${callback}&t=${Date.now()}`;
     script.onerror = () => { $("status").textContent = "Errore di collegamento al database. Riprova più tardi."; };
     document.body.appendChild(script);
   }
-  $("feed-view-button").addEventListener("click",()=>setView("feed"));
-  $("month-view-button").addEventListener("click",()=>setView("month"));
   $("filters").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(b)setCategory(b.dataset.category);});
-  $("prev-month").addEventListener("click",()=>{state.month.setMonth(state.month.getMonth()-1);renderMonth();});
-  $("next-month").addEventListener("click",()=>{state.month.setMonth(state.month.getMonth()+1);renderMonth();});
   $("archive-toggle").addEventListener("click",()=>{
     state.archiveOpen=!state.archiveOpen;
     $("archive-content").classList.toggle("hidden",!state.archiveOpen);

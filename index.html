@@ -32,10 +32,6 @@
       </section>
 
       <section class="toolbar" aria-label="Navigazione eventi">
-        <div class="view-switch" role="group" aria-label="Tipo di visualizzazione">
-          <button class="view-button active" id="feed-view-button" type="button">FEED</button>
-          <button class="view-button" id="month-view-button" type="button">CALENDARIO</button>
-        </div>
         <div class="filters" id="filters" aria-label="Filtra per categoria">
           <button class="filter-button active" data-category="Tutti" type="button">TUTTI</button>
           <button class="filter-button" data-category="Concerti" type="button">CONCERTI</button>
@@ -53,16 +49,6 @@
           <span class="empty-mark">—</span>
           <p>Non ci sono eventi da mostrare in questa selezione.</p>
         </div>
-      </section>
-
-      <section id="month-view" class="month-view hidden" aria-label="Calendario mensile">
-        <div class="month-heading">
-          <button class="month-arrow" id="prev-month" type="button" aria-label="Mese precedente">←</button>
-          <h2 id="month-title"></h2>
-          <button class="month-arrow" id="next-month" type="button" aria-label="Mese successivo">→</button>
-        </div>
-        <div class="calendar-grid" id="calendar-grid"></div>
-        <div class="calendar-events" id="calendar-events"></div>
       </section>
 
       <section class="archive-section">

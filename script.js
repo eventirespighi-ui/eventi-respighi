@@ -72,6 +72,7 @@
       <div class="event-main">
         <div class="event-category${category === "Concerti" || category === "Masterclass" ? " extended-category" : ""}">${esc(category)}</div>
         <h2 class="event-title">${esc(e.title)}</h2>
+        ${e.subtitle ? `<p class="event-subtitle">${esc(e.subtitle)}</p>` : ""}
         ${e.description ? `<button class="event-action description-toggle" type="button" aria-expanded="false">DESCRIZIONE <span aria-hidden="true">＋</span></button><div class="description-panel hidden">${desc}</div>` : ""}${image}
       </div>
       <div class="event-side">
@@ -124,7 +125,7 @@
       endDate:String(row.endDate || "").trim(), startTime:String(row.startTime || "").trim(),
       endTime:String(row.endTime || "").trim(), category:String(row.category || "Altri eventi"),
       description:String(row.description || ""), location:String(row.location || ""),
-      imageUrl:String(row.imageUrl || ""), infoUrl:String(row.infoUrl || ""), artist:String(row.artist || "")
+      imageUrl:String(row.imageUrl || ""), infoUrl:String(row.infoUrl || ""), subtitle:String(row.subtitle || "")
     };
   }
   function loadEvents() {

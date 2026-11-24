@@ -64,13 +64,14 @@
     const d = parseDate(e.date);
     const dateText = d ? fmtDate(d) : e.date;
     const category = categoryOf(e.category);
+    const categoryLabel = category === "Concerti" ? "Concerto" : category;
     const desc = e.description ? `<div class="event-description">${esc(e.description)}</div>` : "";
     const image = e.imageUrl && /^https?:\/\//i.test(e.imageUrl) ? `<img class="event-image" src="${esc(e.imageUrl)}" alt="Locandina: ${esc(e.title)}" loading="lazy">` : "";
     const info = e.infoUrl && /^https?:\/\//i.test(e.infoUrl) ? `<a class="event-action" href="${esc(e.infoUrl)}" target="_blank" rel="noopener">DETTAGLI ↗</a>` : "";
     return `<article class="event-item">
       <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()] : ""}</span></div>
       <div class="event-main">
-        <div class="event-category${category === "Concerti" || category === "Masterclass" ? " extended-category" : ""}">${esc(category)}</div>
+        <div class="event-category${category === "Concerti" || category === "Masterclass" ? " extended-category" : ""}">${esc(categoryLabel)}</div>
         <h2 class="event-title">${esc(e.title)}</h2>
         ${e.subtitle ? `<p class="event-subtitle">${esc(e.subtitle)}</p>` : ""}
         ${e.description ? `<button class="event-action description-toggle" type="button" aria-expanded="false">DESCRIZIONE <span aria-hidden="true">＋</span></button><div class="description-panel hidden">${desc}</div>` : ""}${image}

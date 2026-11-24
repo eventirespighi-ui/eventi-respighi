@@ -97,6 +97,7 @@ h1 span { color: var(--red); }
   .event-meta { font-size: 13px; }
   .event-actions { flex-direction: row; flex-wrap: wrap; gap: 14px; margin-top: 7px; }
   .site-footer { align-items: flex-start; flex-direction: column; margin-top: 50px; }
+  .site-footer div { align-self: flex-end; }
 }
 @media (max-width: 390px) {
   .page-shell { width: calc(100% - 28px); }

@@ -149,7 +149,7 @@
         if (canShareFile) {
           try {
             await navigator.share({files:[file], title:event.title, text:shareText, url:sharePageUrl()});
-            status.textContent = "Menu di condivisione completato.";
+            status.textContent = "Condivisione completata.";
             return;
           } catch (error) {
             if (error && error.name === "AbortError") {

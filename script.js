@@ -64,7 +64,7 @@
     const d = parseDate(e.date);
     const dateText = d ? fmtDate(d) : e.date;
     const category = categoryOf(e.category);
-    const categoryLabel = category === "Concerti" ? "Concerto" : category;
+    const categoryLabel = category === "Concerti" ? "Concerto" : category === "Seminari" ? "Seminario" : category;
     const desc = e.description ? `<div class="event-description">${esc(e.description)}</div>` : "";
     const image = e.imageUrl && /^https?:\/\//i.test(e.imageUrl) ? `<img class="event-image" src="${esc(e.imageUrl)}" alt="Locandina: ${esc(e.title)}" loading="lazy">` : "";
     const info = e.infoUrl && /^https?:\/\//i.test(e.infoUrl) ? `<a class="event-action" href="${esc(e.infoUrl)}" target="_blank" rel="noopener">DETTAGLI ↗</a>` : "";

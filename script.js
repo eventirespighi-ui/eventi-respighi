@@ -71,7 +71,7 @@
     return `<article class="event-item">
       <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()] : ""}</span></div>
       <div class="event-main">
-        <div class="event-category${category === "Concerti" || category === "Masterclass" ? " extended-category" : ""}">${esc(categoryLabel)}</div>
+        <div class="event-category${category === "Concerti" || category === "Masterclass" || category === "Seminari" ? " extended-category" : ""}">${esc(categoryLabel)}</div>
         <h2 class="event-title">${esc(e.title)}</h2>
         ${e.subtitle ? `<p class="event-subtitle">${esc(e.subtitle)}</p>` : ""}
         ${e.description ? `<button class="event-action description-toggle" type="button" aria-expanded="false">DESCRIZIONE <span aria-hidden="true">＋</span></button><div class="description-panel hidden">${desc}</div>` : ""}${image}

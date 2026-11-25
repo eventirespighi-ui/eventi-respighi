@@ -49,9 +49,11 @@
     const endDate = (e.endDate || e.date).replaceAll("-","");
     const start = startDate + "T" + (e.startTime || "0000").replace(":","") + "00";
     const end = endDate + "T" + (e.endTime || (e.startTime ? addHour(e.startTime) : "0100")).replace(":","") + "00";
+    const eventIndex = state.events.indexOf(e);
+    const uid = [fileSlug(e.id) || "evento", startDate, (e.startTime || "0000").replace(":",""), fileSlug(e.title), eventIndex].join("-");
     const stamp = new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
     const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Conservatorio Respighi//Eventi//IT","CALSCALE:GREGORIAN","BEGIN:VEVENT",
-      `UID:${icsEscape(e.id || start + e.title)}@eventi-respighi`,
+      `UID:${icsEscape(uid)}@eventi-respighi`,
       `DTSTAMP:${stamp}`,`DTSTART;TZID=Europe/Rome:${start}`,`DTEND;TZID=Europe/Rome:${end}`,
       `SUMMARY:${icsEscape(e.title)}`,`DESCRIPTION:${icsEscape(e.description || "")}`,
       `LOCATION:${icsEscape(e.location || "")}`,"END:VEVENT","END:VCALENDAR"];
@@ -60,7 +62,9 @@
     const a = document.createElement("a"); a.href = url; a.download = `${(e.title || "evento").toLowerCase().replace(/[^a-z0-9]+/g,"-")}.ics`;
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   }
-  function eventMarkup(e, compact=false) {
+  function eventMarkup(e, archived=false) {
+    // Spreadsheet IDs can be blank or repeated; bind actions to this loaded row instead.
+    const eventIndex = state.events.indexOf(e);
     const d = parseDate(e.date);
     const dateText = d ? fmtDate(d) : e.date;
     const category = categoryOf(e.category);
@@ -68,6 +72,8 @@
     const desc = e.description ? `<div class="event-description">${esc(e.description)}</div>` : "";
     const image = e.imageUrl && /^https?:\/\//i.test(e.imageUrl) ? `<img class="event-image" src="${esc(e.imageUrl)}" alt="Locandina: ${esc(e.title)}" loading="lazy">` : "";
     const info = e.infoUrl && /^https?:\/\//i.test(e.infoUrl) ? `<a class="event-action" href="${esc(e.infoUrl)}" target="_blank" rel="noopener">DETTAGLI ↗</a>` : "";
+    const calendarActions = archived ? "" : `<a class="event-action" href="${esc(calendarUrl(e))}" target="_blank" rel="noopener">+ GOOGLE CALENDAR</a>
+          <button class="event-action ics-button" type="button" data-event-index="${eventIndex}">+ APPLE / .ICS</button>`;
     return `<article class="event-item">
       ${image}
       <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()] : ""}</span></div>
@@ -81,12 +87,11 @@
         ${e.startTime ? `<div class="event-meta">ORE ${esc(e.startTime)}${e.endTime ? " — " + esc(e.endTime) : ""}</div>` : ""}
         ${e.location ? `<div class="event-meta">${esc(e.location)}</div>` : ""}
         <div class="event-actions">
-          <a class="event-action" href="${esc(calendarUrl(e))}" target="_blank" rel="noopener">+ GOOGLE CALENDAR</a>
-          <button class="event-action ics-button" type="button" data-event-id="${esc(e.id)}">+ APPLE / .ICS</button>
+          ${calendarActions}
           <button class="event-action share-toggle" type="button" aria-expanded="false">CONDIVIDI <span aria-hidden="true">＋</span></button>
           <div class="share-options hidden" role="group" aria-label="Scegli il formato di condivisione">
-            <button class="share-format" type="button" data-event-id="${esc(e.id)}" data-format="story">STORIA</button>
-            <button class="share-format" type="button" data-event-id="${esc(e.id)}" data-format="post">POST</button>
+            <button class="share-format" type="button" data-event-index="${eventIndex}" data-format="story">STORIA</button>
+            <button class="share-format" type="button" data-event-index="${eventIndex}" data-format="post">POST</button>
             <span class="share-status" role="status" aria-live="polite"></span>
           </div>
           ${info}
@@ -119,7 +124,8 @@
   }
   function bindICS() {
     document.querySelectorAll(".ics-button").forEach(btn => btn.addEventListener("click", () => {
-      const e = state.events.find(x => String(x.id) === btn.dataset.eventId);
+      const index = Number(btn.dataset.eventIndex);
+      const e = Number.isInteger(index) ? state.events[index] : null;
       if (e) downloadICS(e);
     }));
   }
@@ -132,7 +138,8 @@
       btn.querySelector("span").textContent = open ? "−" : "＋";
     }));
     document.querySelectorAll(".share-format").forEach(btn => btn.addEventListener("click", async () => {
-      const event = state.events.find(item => String(item.id) === btn.dataset.eventId);
+      const index = Number(btn.dataset.eventIndex);
+      const event = Number.isInteger(index) ? state.events[index] : null;
       if (!event) return;
       const panel = btn.closest(".share-options");
       const status = panel.querySelector(".share-status");

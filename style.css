@@ -25,10 +25,7 @@ button { color: inherit; }
 .site-header { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); }
 .wordmark { display: flex; flex-direction: column; gap: 1px; color: var(--white); text-decoration: none; font-family: var(--sans); font-size: 9px; line-height: 1.35; letter-spacing: .09em; }
 .wordmark strong { font-family: var(--sans); font-size: 13px; letter-spacing: .035em; font-weight: 800; }
-.institution-link, .site-footer a { color: var(--white); text-decoration: none; font: 700 10px var(--sans); letter-spacing: .055em; }.institution-link:hover, .site-footer a:hover { color: var(--red); }
-.whatsapp-button { display: inline-flex; align-items: center; justify-content: center; padding: 11px 16px; border: 1px solid var(--white); background: var(--white); color: var(--green-deep); transition: background-color .2s ease, color .2s ease; }
-.institution-link.whatsapp-button { color: var(--green-deep); }
-.institution-link.whatsapp-button:hover { background: transparent; color: var(--white); }
+.institution-link, .site-footer a { color: var(--white); text-decoration: none; font: 700 10px var(--sans); letter-spacing: .055em; }.institution-link:hover, .site-footer a:hover { color: var(--red); }.whatsapp-button { display: inline-flex; align-items: center; justify-content: center; padding: 11px 16px; border: 1px solid var(--white); background: transparent; color: var(--white); transition: background-color .2s ease, color .2s ease; }.institution-link.whatsapp-button { color: var(--white); }.institution-link.whatsapp-button:hover, .institution-link.whatsapp-button:focus-visible, .institution-link.whatsapp-button:active { background: var(--white); color: var(--green-deep); }
 .site-footer .footer-links { display: flex; flex-direction: column; align-items: flex-start; align-self: flex-start; gap: 8px; text-align: left; }
 .intro { padding: 30px 0 26px; }
 .eyebrow, .event-category, .status-line, .archive-toggle, .archive-note { font-family: var(--sans); }

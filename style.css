@@ -37,12 +37,12 @@ h1 span { color: var(--red); }
 .intro-note { margin: 0 2px 3px 0; color: var(--white-soft); font-size: 14px; line-height: 1.55; }
 .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 13px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .filters { display: flex; flex-wrap: wrap; gap: 5px; }
-.filter-button { border: 1px solid transparent; background: transparent; padding: 9px 12px; cursor: pointer; font: 700 12px var(--sans); letter-spacing: .055em; }
+.filter-button { border: 1px solid transparent; background: transparent; padding: 9px 12px; cursor: pointer; font: 700 clamp(11px, 1vw, 13px) var(--sans); letter-spacing: .055em; }
 .filter-button.active { border-color: var(--white); background: var(--white); color: var(--green-deep); }
 .filter-button { color: var(--white-soft); }
 .filter-button:hover { border-color: var(--white); color: var(--white); }
 .filter-button.active:hover { color: var(--green-deep); }
-.filter-button[data-category="Concerti"], .filter-button[data-category="Masterclass"], .filter-button[data-category="Seminari"], .filter-button[data-category="Altri eventi"] { font-size: 13px; text-transform: lowercase; }
+.filter-button[data-category="Concerti"], .filter-button[data-category="Masterclass"], .filter-button[data-category="Seminari"], .filter-button[data-category="Altri eventi"] { font-size: clamp(9px, 2.6vw, 11px); text-transform: lowercase; }
 .status-line { min-height: 42px; display: flex; align-items: center; color: var(--white-soft); font-size: 10px; font-weight: 700; letter-spacing: .07em; }
 .event-item { display: grid; grid-template-columns: 205px minmax(0, 1fr) 235px; gap: 26px; padding: 45px 0 48px; border-bottom: 1px solid var(--line); }
 .event-date { color: var(--white); font-family: var(--sans); font-size: clamp(19px, 2vw, 25px); line-height: 1.18; letter-spacing: -.055em; font-weight: 800; }

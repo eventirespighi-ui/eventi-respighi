@@ -39,7 +39,7 @@ h1 span { color: var(--red); }
 .filters { display: flex; flex-wrap: wrap; gap: 5px; }
 .filter-button { border: 1px solid transparent; background: transparent; padding: 9px 12px; cursor: pointer; font: 700 clamp(11px, 1vw, 13px) var(--sans); letter-spacing: .055em; }
 .filter-button.active { border-color: var(--white); background: var(--white); color: var(--green-deep); }
-.filter-button { color: var(--white-soft); }
+.filter-button { color: var(--white-soft); } :root.music-per-latina-theme { --green: #3d63ea; }
 .filter-button:hover { border-color: var(--white); color: var(--white); }
 .filter-button.active:hover { color: var(--green-deep); }
 .filter-button[data-category="Concerti"], .filter-button[data-category="Masterclass"], .filter-button[data-category="Seminari"], .filter-button[data-category="Altri eventi"] {  text-transform: lowercase; }

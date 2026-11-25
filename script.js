@@ -24,7 +24,7 @@
     if (v.includes("concert")) return "Concerti";
     if (v.includes("master")) return "Masterclass";
     if (v.includes("semin")) return "Seminari";
-    return "Altri eventi";
+    if (v.includes("altri eventi")) return "Altri eventi";
   };
   function calendarUrl(e) {
     const d = e.date.replaceAll("-","");
@@ -78,7 +78,7 @@
       ${image}
       <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()] : ""}</span></div>
       <div class="event-main">
-        <div class="event-category${category === "Concerti" || category === "Masterclass" || category === "Seminari" ? " extended-category" : ""}">${esc(categoryLabel)}</div>
+        <div class="event-category${category === "Concerti" || category === "Masterclass" || category === "Seminari" || category === "Altri eventi" ? " extended-category" : ""}">${esc(categoryLabel)}</div>
         <h2 class="event-title">${esc(e.title)}</h2>
         ${e.subtitle ? `<p class="event-subtitle">${esc(e.subtitle)}</p>` : ""}
         ${e.description ? `<button class="event-action description-toggle" type="button" aria-expanded="false">DESCRIZIONE <span aria-hidden="true">＋</span></button><div class="description-panel hidden">${desc}</div>` : ""}

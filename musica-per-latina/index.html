@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#EB5B3B">
+  <meta name="description" content="Musica per Latina — Il Respighi in strada.">
+  <title>Musica per Latina — Conservatorio Ottorino Respighi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="series-page">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="institution-link" href="https://www.conslatina.it/" target="_blank" rel="noopener">SITO ISTITUZIONALE ↗</a>
+      <a class="wordmark" href="./" aria-label="Musica per Latina">
+        <img src="../logo-respighi.svg" alt="Conservatorio Ottorino Respighi" class="site-logo">
+      </a>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="eyebrow">CONSERVATORIO OTTORINO RESPIGHI</p>
+        <div class="intro-line">
+          <h1>Musica per Latina</h1>
+          <p class="intro-note">Il Respighi in strada</p>
+        </div>
+      </section>
+
+      <div class="status-line" id="status" role="status">Caricamento degli eventi…</div>
+      <section id="feed-view" class="feed-view" aria-live="polite">
+        <div id="events-list"></div>
+        <div class="empty-state hidden" id="empty-state">
+          <span class="empty-mark">—</span>
+          <p>Non ci sono eventi in programma.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a href="https://www.conslatina.it/" target="_blank" rel="noopener">TORNA AL SITO ISTITUZIONALE ↗</a>
+      <div>
+        <strong>CONSERVATORIO OTTORINO RESPIGHI</strong>
+        <span>VIA EZIO 32, LATINA</span>
+      </div>
+    </footer>
+  </div>
+  <script src="../config.js"></script>
+  <script>
+    window.EVENTS_CONFIG = {
+      ...(window.EVENTS_CONFIG || {}),
+      sheetName: "Musica per Latina",
+      shareUrl: "https://eventirespighi-ui.github.io/eventi-respighi/musica-per-latina/",
+      logoUrl: "../logo-respighi.svg",
+      showCategory: false,
+      showShareCategory: false,
+      previewEvents: [{
+        id: "MPL-PREVIEW-1",
+        published: "SI",
+        date: "2027-01-15",
+        startTime: "18:00",
+        endTime: "19:30",
+        title: "Titolo dell’evento",
+        subtitle: "Sottotitolo dell’evento",
+        description: "Breve descrizione dell’appuntamento. Questo testo si apre dal pulsante Descrizione.",
+        location: "Luogo da definire"
+      }]
+    };
+  </script>
+  <script src="../script.js"></script>
+</body>
+</html>

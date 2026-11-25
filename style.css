@@ -59,7 +59,7 @@ h1 span { color: var(--red); }
 .event-meta { color: var(--white); font-family: var(--sans); font-size: 16px; line-height: 1.5; font-weight: 600; }
 .event-meta:first-child { font-weight: 800; }
 .event-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; margin-top: 9px; }
-.event-action { color: var(--white-soft); text-decoration: none; border-bottom: 1px solid rgba(255,254,250,.55); padding: 0 0 3px; font: 700 12px var(--sans); letter-spacing: .045em; width: fit-content; background: none; border-top: 0; border-left: 0; border-right: 0; cursor: pointer; }
+.event-action { color: var(--white-soft); text-decoration: none; border-bottom: 1px solid rgba(255,254,250,.55); padding: 0 0 3px; font: 700 10px var(--sans); letter-spacing: .045em; width: fit-content; background: none; border-top: 0; border-left: 0; border-right: 0; cursor: pointer; }
 .event-action:hover { color: var(--red); border-color: var(--red); }
 .share-options { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; }
 .share-format { border: 1px solid var(--line); background: transparent; color: var(--white-soft); padding: 5px 8px; cursor: pointer; font: 700 9px var(--sans); letter-spacing: .045em; }

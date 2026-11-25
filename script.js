@@ -337,7 +337,7 @@
     return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Esportazione immagine non riuscita")), "image/png"));
   }
   function setCategory(category) {
-    state.category = category;
+    state.category = category; document.documentElement.classList.toggle("music-per-latina-theme", category === "Musica per Latina");
     document.querySelectorAll(".filter-button").forEach(b=>b.classList.toggle("active",b.dataset.category===category));
     renderFeed();
   }

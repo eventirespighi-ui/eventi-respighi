@@ -24,7 +24,7 @@
     if (v.includes("concert")) return "Concerti";
     if (v.includes("master")) return "Masterclass";
     if (v.includes("semin")) return "Seminari";
-    if (v.includes("altri eventi")) return "Altri eventi";
+    return "Altri eventi";
   };
   function calendarUrl(e) {
     const d = e.date.replaceAll("-","");
@@ -65,6 +65,7 @@
   function eventMarkup(e, archived=false) {
     // Spreadsheet IDs can be blank or repeated; bind actions to this loaded row instead.
     const eventIndex = state.events.indexOf(e);
+    const showCategory = !(window.EVENTS_CONFIG && window.EVENTS_CONFIG.showCategory === false);
     const d = parseDate(e.date);
     const dateText = d ? fmtDate(d) : e.date;
     const category = categoryOf(e.category);
@@ -78,7 +79,7 @@
       ${image}
       <div class="event-date">${esc(dateText)}<span class="weekday">${d ? dayNames[d.getDay()] : ""}</span></div>
       <div class="event-main">
-        <div class="event-category${category === "Concerti" || category === "Masterclass" || category === "Seminari" || category === "Altri eventi" ? " extended-category" : ""}">${esc(categoryLabel)}</div>
+        ${showCategory ? `<div class="event-category${category === "Concerti" || category === "Masterclass" || category === "Seminari" || category === "Altri eventi" ? " extended-category" : ""}">${esc(categoryLabel)}</div>` : ""}
         <h2 class="event-title">${esc(e.title)}</h2>
         ${e.subtitle ? `<p class="event-subtitle">${esc(e.subtitle)}</p>` : ""}
         ${e.description ? `<button class="event-action description-toggle" type="button" aria-expanded="false">DESCRIZIONE <span aria-hidden="true">＋</span></button><div class="description-panel hidden">${desc}</div>` : ""}
@@ -107,8 +108,11 @@
     $("events-list").innerHTML = future.map(e => eventMarkup(e)).join("");
     $("empty-state").classList.toggle("hidden", future.length > 0);
     $("status").textContent = `${future.length} ${future.length === 1 ? "EVENTO IN PROGRAMMA" : "EVENTI IN PROGRAMMA"}`;
-    const past = visibleEvents().filter(isPast).sort((a,b) => b.date.localeCompare(a.date));
-    $("archive-list").innerHTML = past.length ? past.map(e => eventMarkup(e,true)).join("") : `<p class="empty-state">Nessun evento archiviato in questa selezione.</p>`;
+    const archiveList = $("archive-list");
+    if (archiveList) {
+      const past = visibleEvents().filter(isPast).sort((a,b) => b.date.localeCompare(a.date));
+      archiveList.innerHTML = past.length ? past.map(e => eventMarkup(e,true)).join("") : `<p class="empty-state">Nessun evento archiviato in questa selezione.</p>`;
+    }
     bindICS();
     bindDescriptions();
     bindShare();
@@ -150,7 +154,8 @@
         const blob = await createShareImage(event, btn.dataset.format);
         const filename = `${fileSlug(event.title)}-${btn.dataset.format}.png`;
         const file = typeof File === "function" ? new File([blob], filename, {type:"image/png"}) : null;
-        const shareText = [shareCategory(event.category), fmtDate(parseDate(event.date)), event.startTime ? `ore ${event.startTime}` : ""].filter(Boolean).join(" · ");
+        const shareCategoryText = window.EVENTS_CONFIG && window.EVENTS_CONFIG.showCategory === false ? "" : shareCategory(event.category);
+        const shareText = [shareCategoryText, fmtDate(parseDate(event.date)), event.startTime ? `ore ${event.startTime}` : ""].filter(Boolean).join(" · ");
         let canShareFile = false;
         try { canShareFile = Boolean(file && navigator.share && navigator.canShare && navigator.canShare({files:[file]})); } catch (_) {}
         if (canShareFile) {
@@ -188,7 +193,7 @@
   function sharePageUrl() {
     const localHost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
     return window.location.protocol === "file:" || localHost
-      ? "https://eventirespighi-ui.github.io/eventi-respighi/"
+      ? ((window.EVENTS_CONFIG && window.EVENTS_CONFIG.shareUrl) || "https://eventirespighi-ui.github.io/eventi-respighi/")
       : window.location.href.split("#")[0];
   }
   function fileSlug(value) {
@@ -202,6 +207,7 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   function loadShareLogo() {
+    const logoUrl = window.EVENTS_CONFIG && window.EVENTS_CONFIG.logoUrl || "logo-respighi.svg";
     return new Promise(resolve => {
       const logo = new Image();
       let settled = false;
@@ -214,7 +220,7 @@
       const timeout = setTimeout(() => finish(null), 2000);
       logo.onload = () => finish(logo);
       logo.onerror = () => finish(null);
-      logo.src = new URL("logo-respighi.svg", document.baseURI).href;
+      logo.src = new URL(logoUrl, document.baseURI).href;
     });
   }
   function drawWrappedText(ctx, value, x, y, maxWidth, lineHeight, maxLines) {
@@ -275,9 +281,13 @@
       ]).catch(() => {}),
       new Promise(resolve => setTimeout(resolve, 1500))
     ]);
-    ctx.font = `700 ${story ? 44 : 38}px "Helvetica Neue LT Pro Extended", Arial, sans-serif`;
-    ctx.fillText(shareCategory(event.category), padding, y);
-    y += story ? 94 : 78;
+    if (!(window.EVENTS_CONFIG && window.EVENTS_CONFIG.showShareCategory === false)) {
+      ctx.font = `700 ${story ? 44 : 38}px "Helvetica Neue LT Pro Extended", Arial, sans-serif`;
+      ctx.fillText(shareCategory(event.category), padding, y);
+      y += story ? 94 : 78;
+    } else {
+      y += story ? 34 : 28;
+    }
 
     ctx.fillStyle = foreground;
     ctx.font = `800 ${titleSize}px Manrope, Arial, sans-serif`;
@@ -340,7 +350,15 @@
     };
   }
   function loadEvents() {
-    const url = window.EVENTS_CONFIG && window.EVENTS_CONFIG.apiUrl;
+    const config = window.EVENTS_CONFIG || {};
+    const localHost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+    if ((window.location.protocol === "file:" || localHost) && Array.isArray(config.previewEvents)) {
+      state.events = config.previewEvents.map(normalize).filter(e => e.title && parseDate(e.date));
+      renderFeed();
+      $("status").textContent = "ANTEPRIMA LOCALE · DATI DI ESEMPIO";
+      return;
+    }
+    const url = config.apiUrl;
     if (!url || url.includes("INCOLLA_QUI")) {
       $("status").textContent = "CONFIGURAZIONE NECESSARIA: collega il foglio Google per caricare gli eventi.";
       return;
@@ -356,12 +374,16 @@
       renderFeed();
     };
     const script = document.createElement("script");
-    script.src = `${url}${url.includes("?")?"&":"?"}callback=${callback}&t=${Date.now()}`;
+    const endpoint = new URL(url, document.baseURI);
+    if (config.sheetName) endpoint.searchParams.set("sheet", config.sheetName);
+    endpoint.searchParams.set("callback", callback);
+    endpoint.searchParams.set("t", Date.now());
+    script.src = endpoint.href;
     script.onerror = () => { $("status").textContent = "Errore di collegamento al database. Riprova più tardi."; };
     document.body.appendChild(script);
   }
-  $("filters").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(b)setCategory(b.dataset.category);});
-  $("archive-toggle").addEventListener("click",()=>{
+  if ($("filters")) $("filters").addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(b)setCategory(b.dataset.category);});
+  if ($("archive-toggle")) $("archive-toggle").addEventListener("click",()=>{
     state.archiveOpen=!state.archiveOpen;
     $("archive-content").classList.toggle("hidden",!state.archiveOpen);
     $("archive-toggle").setAttribute("aria-expanded",String(state.archiveOpen));

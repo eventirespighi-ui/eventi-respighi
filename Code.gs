@@ -1,5 +1,5 @@
 /*
- * CONSERVATORIO OTTORINO RESPIGHI — API EVENTI
+ * CONSERVATORIO OTTORINO RESPIGHI — API EVENTI E ID AUTOMATICI
  *
  * 1. Apri il Google Sheet degli eventi.
  * 2. Estensioni > Apps Script.
@@ -7,13 +7,63 @@
  * 4. Salva e distribuisci come applicazione web.
  *
  * Il foglio deve chiamarsi "Eventi" e avere le intestazioni indicate
- * nel modello CSV/README. Il servizio è in sola lettura.
+ * nel modello CSV/README. L'API è in sola lettura; il trigger onEdit assegna
+ * un ID fisso alle nuove righe che hanno un titolo e non hanno ancora un ID.
  */
 const SHEET_NAME = "Eventi";
+const MUSIC_SHEET_NAME = "Musica per Latina";
+const EVENT_SHEET_NAMES = [SHEET_NAME, MUSIC_SHEET_NAME];
+
+/** Assegna ID EVT### fissi alle righe nuove quando viene inserito il titolo. */
+function onEdit(e) {
+  if (!e || !e.range) return;
+  const sheet = e.range.getSheet();
+  if (!EVENT_SHEET_NAMES.includes(sheet.getName())) return;
+
+  const firstRow = Math.max(2, e.range.getRow());
+  const lastRow = Math.min(sheet.getLastRow(), e.range.getLastRow());
+  if (firstRow > lastRow) return;
+
+  const lastColumn = sheet.getLastColumn();
+  const headers = sheet.getRange(1, 1, 1, lastColumn).getDisplayValues()[0]
+    .map(value => String(value).trim().toLowerCase());
+  const idColumn = headers.indexOf("id") + 1;
+  const titleColumn = headers.indexOf("titolo") + 1;
+  if (!idColumn || !titleColumn) return;
+
+  const lock = LockService.getDocumentLock();
+  if (!lock.tryLock(5000)) return;
+  try {
+    let lastNumber = EVENT_SHEET_NAMES.reduce((max, sheetName) => {
+      const eventSheet = e.source.getSheetByName(sheetName);
+      if (!eventSheet || eventSheet.getLastRow() < 2) return max;
+      const eventHeaders = eventSheet.getRange(1, 1, 1, eventSheet.getLastColumn()).getDisplayValues()[0]
+        .map(value => String(value).trim().toLowerCase());
+      const eventIdColumn = eventHeaders.indexOf("id") + 1;
+      if (!eventIdColumn) return max;
+      const ids = eventSheet.getRange(2, eventIdColumn, eventSheet.getLastRow() - 1, 1).getDisplayValues().flat();
+      return ids.reduce((currentMax, value) => {
+        const match = /^EVT\s*(\d+)$/i.exec(String(value).trim());
+        return match ? Math.max(currentMax, Number(match[1])) : currentMax;
+      }, max);
+    }, 0);
+
+    for (let row = firstRow; row <= lastRow; row++) {
+      const currentId = String(sheet.getRange(row, idColumn).getDisplayValue()).trim();
+      const title = String(sheet.getRange(row, titleColumn).getDisplayValue()).trim();
+      if (currentId || !title) continue;
+      lastNumber++;
+      sheet.getRange(row, idColumn).setValue("EVT" + String(lastNumber).padStart(3, "0"));
+    }
+  } finally {
+    lock.releaseLock();
+  }
+}
 
 function doGet(e) {
   const callback = (e && e.parameter && e.parameter.callback) || "";
-  const result = getEvents_();
+  const requestedSheet = e && e.parameter && e.parameter.sheet;
+  const result = getEvents_(requestedSheet);
   const json = JSON.stringify(result);
   if (callback && /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(callback)) {
     return ContentService
@@ -25,11 +75,12 @@ function doGet(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-function getEvents_() {
+function getEvents_(requestedSheet) {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName(SHEET_NAME);
-    if (!sheet) throw new Error('Non trovo un foglio chiamato "' + SHEET_NAME + '".');
+    const sheetName = requestedSheet && EVENT_SHEET_NAMES.includes(requestedSheet) ? requestedSheet : SHEET_NAME;
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) throw new Error('Non trovo un foglio chiamato "' + sheetName + '".');
     const values = sheet.getDataRange().getDisplayValues();
     if (values.length < 2) return { ok: true, events: [] };
     const headers = values[0].map(h => String(h).trim().toLowerCase());

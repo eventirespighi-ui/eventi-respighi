@@ -7,8 +7,10 @@ Sito statico per pubblicare un feed eventi da Google Sheets.
 - `style.css`: stile editoriale responsive
 - `script.js`: feed, filtri, descrizioni espandibili, archivio, Google Calendar, file ICS e grafiche condivisibili in formato Storia/Post
 - `config.js`: URL della Web App Apps Script
-- `Code.gs`: API di sola lettura da installare in Apps Script
+- `Code.gs`: API eventi e trigger per l'assegnazione automatica degli ID nel foglio
 - `Eventi-template.csv`: intestazioni e righe di esempio per Google Sheets
+- `musica-per-latina/index.html`: pagina autonoma della rassegna, senza filtri né archivio
+- `Musica-per-Latina-template.csv`: intestazioni per la scheda Google Sheets della rassegna
 
 ## A. Crea il database Google Sheets
 1. Crea un nuovo Google Sheet con l'account istituzionale condiviso.
@@ -59,7 +61,16 @@ Nota privacy: l'endpoint rende pubblici i campi degli eventi con `Pubblicato = S
 
 ## Note
 - La pagina mostra automaticamente gli eventi futuri nel feed e quelli passati nell'archivio.
+- Solo gli eventi futuri offrono i pulsanti Google Calendar e Apple/.ics.
+- Nel foglio, il trigger `onEdit` assegna un ID `EVT###` fisso quando si inserisce il titolo di una riga senza ID.
 - Le descrizioni degli eventi si aprono dal relativo pulsante nel feed e nell'archivio.
 - Il filtro selezionato si applica al feed e all'archivio.
 - Per aggiornare il sito dopo una modifica grafica/codice, carica i file modificati su GitHub. Le modifiche agli eventi si fanno invece solo su Google Sheets.
 - Per un progetto istituzionale, usare un account Google e GitHub controllato dal Conservatorio e almeno due amministratori.
+
+## Pagina “Musica per Latina” (bozza locale)
+- Apri `musica-per-latina/index.html` per la seconda pagina. In locale mostra una scheda di esempio; sul sito pubblico caricherà i dati dal foglio `Musica per Latina`.
+- Crea una nuova scheda nello stesso Google Sheet chiamata esattamente `Musica per Latina`, con le intestazioni in `Musica-per-Latina-template.csv`.
+- La pagina riusa i campi e le azioni della pagina principale, ma non mostra categorie, filtri o archivio. Sono visibili soltanto gli eventi futuri.
+- `Code.gs` è stato predisposto localmente per servire la scheda richiesta tramite il parametro `sheet` e assegnare gli ID anche alle righe della nuova scheda. Quando la tabella e la pagina saranno pronte, aggiorna Apps Script e crea una nuova distribuzione prima di pubblicare i file su GitHub.
+- L’indirizzo GitHub Pages della pagina sarà `https://eventirespighi-ui.github.io/eventi-respighi/musica-per-latina/` dopo aver caricato il progetto.
